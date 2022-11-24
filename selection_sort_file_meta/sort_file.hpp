@@ -17,46 +17,38 @@ template <class type, class cont>
 void read_file_to_cont(std::ifstream &fi, cont& co)
 {
   type myelm;
+    if constexpr (std::is_same_v<char, type>) {
+        while (fi.get(myelm)) {
+            co.push_back(myelm);
+            fi.get(myelm);
+        }
+    }
+    else {
+        while (fi >> myelm) {
+            co.push_back(myelm);
+        }
+    }
 
-  if constexpr (std::is_same_v<type, char>)
-  {
-    char charac;
-    while (fi.get(charac))
-    {
-      fi.get(charac);
-      co.push_back(charac);
-    }
-  }
-  else
-  {
-    while (fi >> myelm)
-    {
-      co.push_back(myelm);
-    }
-  }
 }
 
 
 
 template <class type, class cont>
-void read_and_sort(std::ifstream &fi, std::ofstream &fo)
-{
-    cont container ={};
-  read_file_to_cont<type, cont>(fi, container);
+void read_and_sort(std::ifstream& fi, std::ofstream& fo) {
+    cont container = {};
+    read_file_to_cont<type, cont>(fi, container);
+    if constexpr (std::is_integral_v<type>) {
+        my_selection_sort(container.begin(), container.end(), [](type l, type r)->bool {
+            return std::make_tuple(l%2, l) < std::make_tuple(r%2, r);
+        });
+    }
+    else {
+        my_selection_sort(container.begin(), container.end(), [](type l, type r)->bool { return l > r;});
 
-  auto begin = container.begin();
-  auto end = container.end();
-  if constexpr (
-    std::is_same_v<ValueType, char> || std::is_same_v<type, int> || std::is_same_v<type, unsigned int> ) {
-    my_selection_sort(begin, end,[](type l, type r)->bool{return std::make_tuple(l%2, l) < std::make_tuple(r%2, r);} );
-  } else {
-    my_selection_sort(begin, end,[](type l, type r)->bool{return l > r; } );
-  }
-
+    }
     for (type &myelm : container)
-        fo << myelm << std::endl;
+        fo << myelm << "\n";
 }
-
 
 
 
