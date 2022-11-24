@@ -1,0 +1,3 @@
+/Users/papeibrahimadiawara/set_functions/CMakeFiles/main.dir
+/Users/papeibrahimadiawara/set_functions/CMakeFiles/edit_cache.dir
+/Users/papeibrahimadiawara/set_functions/CMakeFiles/rebuild_cache.dir
